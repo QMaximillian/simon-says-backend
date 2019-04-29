@@ -1,12 +1,18 @@
+"use strict";
 
 exports.up = function(knex, Promise) {
-    knex.schema.createTable('users', t => {
-        t.increments('id').primary()
+    return knex.schema.createTable('users', t => {
+        t.increments().primary()
         t.string('initials')
-        t.number('score')
+          .notNullable()
+          .defaultTo('')
+        t.integer('score')
+          .notNullable()
+          .defaultTo(0)
+        t.timestamps(true, true)
     })
 };
 
 exports.down = function(knex, Promise) {
-  knex.schema.dropTableIfExists('users')
+  return knex.schema.dropTableIfExists('users')
 };
