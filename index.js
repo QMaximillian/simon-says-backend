@@ -1,19 +1,31 @@
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 
+
+const database = require('./database')
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
-  type Query {
-    hello: String
-  }
+
+    type User {
+        initials: String!, 
+        score: Int!
+    }
+
+    type Query {
+        users: [User]
+    }
 `;
 
 // Provide resolver functions for your schema fields
 const resolvers = {
     Query: {
-        hello: () => 'LOL!',
+        users: async () => {
+            const users = await database('users').select()
+            return users
+        }
     },
 };
+
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
